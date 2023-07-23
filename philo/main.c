@@ -17,17 +17,17 @@
 // 	}
 // }
 
-// void init_data(t_data *data, int ac, char **argv)
-// {
-// 	data->number_of_phil = atoi(argv[1]);
-// 	data->time_to_die = atoi(argv[2]);
-// 	data->time_to_eat = atoi(argv[3]);
-// 	data->time_to_sleep = atoi(argv[4]);
-// 	data->number_of_meals = -1;
-// 	if (argv[5])
-// 		data->number_of_meals = atoi(argv[5]);
-// 	data->start_time = get_time();
-// }
+void init_data(t_data *data, char **argv)
+{
+	data->number_of_phil = ft_atoi(argv[1]);
+	data->time_to_die = ft_atoi(argv[2]);
+	data->time_to_eat = ft_atoi(argv[3]);
+	data->time_to_sleep = ft_atoi(argv[4]);
+	data->number_of_meals = -1;
+	if (argv[5])
+		data->number_of_meals = ft_atoi(argv[5]);
+	data->start_time = get_time();
+}
 
 // void *routine(void *philo)
 // {
@@ -94,12 +94,12 @@
 int main(int ac, char **argv)
 {
 
-	// t_data data;
+	t_data data;
 	// t_philo philos;
 
 	if (check_errors(ac, argv))
 		return (1);
-	// init_data(data, ac, argv);
+	init_data(&data, argv);
 	// if (init_philo(philos, data))
 	// 	return (1);
 }

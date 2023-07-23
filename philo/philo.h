@@ -29,8 +29,8 @@ typedef struct s_philo
 }		t_philo;
 
 bool	check_errors(int ac, char **argv);
+long long	get_time();
 // void	check_death(t_data *data, t_philo  *philos);
-// long long	get_time();
 // void	ft_usleep(size_t t_ms);
 // void	ft_putstr_fd(char *s, int fd);
 // int	ft_isdigit(char c);
