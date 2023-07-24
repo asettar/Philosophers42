@@ -32,13 +32,15 @@ typedef struct s_philo
 
 bool		check_errors(int ac, char **argv);
 long long	get_time();
-int			ft_atoi(const char *str);
+bool		init_philo(t_philo *philos, t_data *data);
+void		init_data(t_data *data, char **argv);
 void		ft_putstr_fd(char *s, int fd);
-int			ft_memcmp(const void *s1, const void *s2, size_t n);
-int			ft_isdigit(int c);
-
+int			ft_atoi(const char *str);
+void		ft_usleep(size_t t_ms);
+void		check_death(t_data *data, t_philo *philos);
+bool		create_threads(t_philo *philos , t_data *data);
+void		print(t_philo * ph, char *s);
 // void	check_death(t_data *data, t_philo  *philos);
 // void	ft_usleep(size_t t_ms);
 // void	ft_putstr_fd(char *s, int fd);
 // int	ft_isdigit(char c);
-// void	print(t_philo * ph, char *s);
