@@ -1,4 +1,6 @@
-#include "libft/libft.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <stdbool.h>
 #include <pthread.h>
 # include <sys/time.h>
@@ -28,8 +30,13 @@ typedef struct s_philo
 	t_data			*data;
 }		t_philo;
 
-bool	check_errors(int ac, char **argv);
+bool		check_errors(int ac, char **argv);
 long long	get_time();
+int			ft_atoi(const char *str);
+void		ft_putstr_fd(char *s, int fd);
+int			ft_memcmp(const void *s1, const void *s2, size_t n);
+int			ft_isdigit(int c);
+
 // void	check_death(t_data *data, t_philo  *philos);
 // void	ft_usleep(size_t t_ms);
 // void	ft_putstr_fd(char *s, int fd);

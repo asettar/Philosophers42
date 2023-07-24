@@ -17,7 +17,7 @@
 // 	}
 // }
 
-void init_data(t_data *data, char **argv)
+bool	init_data(t_data *data, char **argv)
 {
 	data->number_of_phil = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
@@ -27,6 +27,9 @@ void init_data(t_data *data, char **argv)
 	if (argv[5])
 		data->number_of_meals = ft_atoi(argv[5]);
 	data->start_time = get_time();
+	if (data->start_time == -1)
+		return(1);
+	return (0);
 }
 
 // void *routine(void *philo)
@@ -77,7 +80,7 @@ void init_data(t_data *data, char **argv)
 // 		pthread_mutex_init(&philos[i].right_fork, NULL);
 // 		philos[i].left_fork = &philos[(i + 1) % data->number_of_phil].right_fork;
 // 	}
-
+ 
 // 	i = -1;
 // 	while (++i < data->number_of_phil)
 // 	{
@@ -99,7 +102,8 @@ int main(int ac, char **argv)
 
 	if (check_errors(ac, argv))
 		return (1);
-	init_data(&data, argv);
-	// if (init_philo(philos, data))
+	if (init_data(&data, argv))
+		return (1);
+	// if (init_philo(&philos, data))
 	// 	return (1);
 }

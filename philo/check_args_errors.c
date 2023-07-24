@@ -29,6 +29,7 @@ bool	check_errors(int ac, char **argv)
 		ft_putstr_fd("INVALID NUMBER OF ARGUMENTS\n", 2);
 		return (1);
 	}
+	argv++;
 	while (*argv)
 	{
 		if (invalid_number(*argv))
