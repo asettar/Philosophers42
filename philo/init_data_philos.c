@@ -9,6 +9,7 @@ void	init_data(t_data *data, char **argv)
 	data->number_of_meals = -1;
 	if (argv[5])
 		data->number_of_meals = ft_atoi(argv[5]);
+	data->left_philos =	 data->number_of_phil;    // only when you have number of meals
 	data->start_time = get_time();
 }
 
@@ -22,8 +23,8 @@ bool	init_philo(t_philo *philos, t_data *data)
 	{
 
 		philos[i].id = i + 1;
-		philos[i].number_of_meals = 0;
 		philos[i].data = data;
+		philos[i].left_meals = data->number_of_meals;
 		philos[i].last_meal = get_time();
 		if (philos[i].last_meal == -1)
 			return (1);
@@ -31,6 +32,8 @@ bool	init_philo(t_philo *philos, t_data *data)
 			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 		if (pthread_mutex_init(&philos[i].right_fork, NULL))
 			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+		// if (pthread_mutex_init(&philos[i].left_meals_mutex, NULL))
+		// 	return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 		philos[i].left_fork = &philos[(i + 1) % data->number_of_phil].right_fork;
 	}
 	if (create_threads(philos, data))

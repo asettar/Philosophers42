@@ -17,10 +17,12 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	}
 	return (0);
 }
+
 int	ft_isdigit(int c)
 {
 	return (c >= 48 && c <= 57);
 }
+
 int	ft_atoi(const char *str)
 {
 	int	integer;
@@ -63,7 +65,7 @@ bool	invalid_number(char *num)
 			return (1);
 	}
 	if ((i - start > 10) || (i - start == 10
-		&& ft_memcmp("2147483647", num + start, 10) < 0))
+			&& ft_memcmp("2147483647", num + start, 10) < 0))
 		return (1);
 	return (0);
 }
@@ -81,7 +83,7 @@ bool	check_errors(int ac, char **argv)
 		if (invalid_number(*argv))
 		{
 			ft_putstr_fd("INVALID INPUTS\n", 2);
-				return (1);
+			return (1);
 		}
 		argv++;
 	}
