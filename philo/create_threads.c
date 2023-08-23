@@ -9,21 +9,21 @@ void	check_death(t_data *data, t_philo *philos)
 		i = -1;
 		while (++i < data->number_of_phil)
 		{
-			// pthread_mutex_lock(&philos[i].left_meals_mutex);
+			pthread_mutex_lock(&data->left_philos_mutex);
 			if (!data->left_philos)
 				return ;
+			pthread_mutex_unlock(&data->left_philos_mutex);
 			pthread_mutex_lock(&philos[i].meal_mutex);
-			// pthread_mutex_lock(&philos[i].num_meals);
 			if (get_time() - philos[i].last_meal >= data->time_to_die
 				&& philos[i].left_meals != 0)
 			{
 				pthread_mutex_lock(&data->print);
 				// printf("%lld\n", get_time() - philos[i].last_meal);
 				printf("%lld philosopher number %d died\n", get_time() - data->start_time, philos[i].id);
+				sleep(1);
 				return ;
 			}
 			pthread_mutex_unlock(&philos[i].meal_mutex);
-			// pthread_mutex_unlock(&philos[i].num_meals);
 		}
 		// usleep(10);
 	}
@@ -50,16 +50,18 @@ void	*routine(void *philo)
 		ft_usleep(ph->data->time_to_eat);
 		pthread_mutex_unlock(&ph->right_fork);
 		pthread_mutex_unlock(ph->left_fork);
-		// pthread_mutex_lock(&ph->left_meals_mutex);
+		pthread_mutex_lock(&ph->left_meals_mutex);
 		if (ph->data->number_of_meals != -1)
 			ph->left_meals--;
 		// printf("%d :: %d||\n", ph->id, ph->left_meals);
 		if (ph->left_meals == 0)
 		{
+			pthread_mutex_lock(&ph->data->left_philos_mutex);
 			ph->data->left_philos--;
+			pthread_mutex_unlock(&ph->data->left_philos_mutex);
 			break;
 		}
-		// pthread_mutex_unlock(&ph->left_meals_mutex);
+		pthread_mutex_unlock(&ph->left_meals_mutex);
 		print(ph, "is sleeping");
 		ft_usleep(ph->data->time_to_sleep);
 		print(ph, "is thinking");
@@ -81,12 +83,14 @@ bool	create_threads(t_philo *philos, t_data *data)
 	while (++i < data->number_of_phil)
 		pthread_detach(philos[i].th);
 	check_death(data, philos);
+	pthread_mutex_destroy(&data->print);
+	pthread_mutex_destroy(&data->left_philos_mutex);
 	i = -1;
 	while (++i < data->number_of_meals)
 	{
 		pthread_mutex_destroy(&philos[i].right_fork);
 		pthread_mutex_destroy(&philos[i].meal_mutex);
-		// pthread_mutex_destroy(&philos[i].right_fork);
+		pthread_mutex_destroy(&philos[i].left_meals_mutex);
 	}
 	return (0);
 }

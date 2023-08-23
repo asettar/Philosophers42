@@ -15,6 +15,7 @@ typedef struct s_data
 	int left_philos;
 	long long	start_time;
 	// bool	phil_dead;
+	pthread_mutex_t	left_philos_mutex;
 	pthread_mutex_t print;
 }	t_data;
 
@@ -34,7 +35,7 @@ typedef struct s_philo
 bool		check_errors(int ac, char **argv);
 long long	get_time();
 bool		init_philo(t_philo *philos, t_data *data);
-void		init_data(t_data *data, char **argv);
+bool		init_data(t_data *data, char **argv);
 void		ft_putstr_fd(char *s, int fd);
 int			ft_atoi(const char *str);
 void		ft_usleep(size_t t_ms);

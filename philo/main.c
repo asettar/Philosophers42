@@ -7,7 +7,8 @@ int	main(int ac, char **argv)
 
 	if (check_errors(ac, argv))
 		return (1);
-	init_data(&data, argv);
+	if (init_data(&data, argv))
+		return (1);
 	philos = (t_philo *)malloc(sizeof(t_philo) * data.number_of_phil);
 	if (!philos)
 		return (ft_putstr_fd("Allocation error\n", 2), 1);
