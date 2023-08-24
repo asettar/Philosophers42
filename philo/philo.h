@@ -6,7 +6,7 @@
 /*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 00:45:01 by asettar           #+#    #+#             */
-/*   Updated: 2023/08/24 00:49:16 by asettar          ###   ########.fr       */
+/*   Updated: 2023/08/24 01:30:04 by asettar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_data
 	long long		start_time;
 	pthread_mutex_t	left_philos_mutex;
 	pthread_mutex_t	print;
+	pthread_mutex_t	dead_mutex;
 }	t_data;
 
 typedef struct s_philo

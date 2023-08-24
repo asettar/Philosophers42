@@ -6,7 +6,7 @@
 /*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 00:44:12 by asettar           #+#    #+#             */
-/*   Updated: 2023/08/24 01:01:14 by asettar          ###   ########.fr       */
+/*   Updated: 2023/08/24 01:43:48 by asettar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	eat(t_philo *ph)
 
 void	sleep_think(t_philo *ph)
 {
-	pthread_mutex_unlock(&ph->left_meals_mutex);
 	print(ph, "is sleeping");
 	ft_usleep(ph->data->time_to_sleep);
 	print(ph, "is thinking");
@@ -73,7 +72,6 @@ void	*routine(void *philo)
 	while (1)
 	{
 		eat(ph);
-		pthread_mutex_lock(&ph->left_meals_mutex);
 		if (ph->data->number_of_meals != -1)
 			ph->left_meals--;
 		if (ph->left_meals == 0)

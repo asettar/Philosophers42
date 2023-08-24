@@ -6,7 +6,7 @@
 /*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 00:33:39 by asettar           #+#    #+#             */
-/*   Updated: 2023/08/24 01:11:49 by asettar          ###   ########.fr       */
+/*   Updated: 2023/08/24 01:44:29 by asettar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ bool	init_data(t_data *data, char **argv)
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 	if (pthread_mutex_init(&data->left_philos_mutex, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+	if (pthread_mutex_init(&data->dead_mutex, NULL))
+		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+
 	return (0);
 }
 
@@ -42,8 +45,6 @@ bool	init_philo(t_philo *philos, t_data *data)
 		if (pthread_mutex_init(&philos[i].meal_mutex, NULL))
 			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 		if (pthread_mutex_init(&philos[i].right_fork, NULL))
-			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
-		if (pthread_mutex_init(&philos[i].left_meals_mutex, NULL))
 			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 		philos[i].id = i + 1;
 		philos[i].data = data;
