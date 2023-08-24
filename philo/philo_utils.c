@@ -27,7 +27,7 @@ void	ft_usleep(size_t t_ms)
 	start = get_time();
 	while (get_time() - start < t_ms)
 	{
-		usleep(100);
+		usleep(50);
 	}
 }
 
@@ -43,4 +43,9 @@ void	print(t_philo *ph, char *s)
 	printf("%lld  ", get_time() - ph->data->start_time);
 	printf("philosopher %d %s\n", ph->id, s);
 	pthread_mutex_unlock(&ph->data->print);
+}
+
+long long	time_(t_philo ph)
+{
+	return (get_time() - ph.last_meal);
 }

@@ -23,11 +23,11 @@ int	main(int ac, char **argv)
 	// atexit(leaks);
 	if (check_errors(ac, argv))
 		return (1);
-	if (init_data(&data, argv))
+	if (initialize_data(&data, argv))
 		return (1);
 	philos = (t_philo *)malloc(sizeof(t_philo) * data.number_of_phil);
 	if (!philos)
 		return (ft_putstr_fd("Allocation error\n", 2), 1);
-	if (init_philo(philos, &data))
+	if (initialize_philos(philos, &data))
 		return (1);
 }

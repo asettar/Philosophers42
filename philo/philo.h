@@ -30,7 +30,7 @@ typedef struct s_data
 	int				left_philos;
 	int				dead_philo;
 	long long		start_time;
-	pthread_mutex_t	left_philos_mutex;
+	pthread_mutex_t	left_philo_mutex;
 	pthread_mutex_t	print;
 	pthread_mutex_t	dead_mutex;
 }	t_data;
@@ -50,13 +50,13 @@ typedef struct s_philo
 
 bool		check_errors(int ac, char **argv);
 long long	get_time(void);
-bool		init_philo(t_philo *philos, t_data *data);
-bool		init_data(t_data *data, char **argv);
+bool		initialize_philos(t_philo *philos, t_data *data);
+bool		initialize_data(t_data *data, char **argv);
 void		ft_putstr_fd(char *s, int fd);
 int			ft_atoi(const char *str);
 void		ft_usleep(size_t t_ms);
 void		check_death(t_data *data, t_philo *philos);
 bool		create_threads(t_philo *philos, t_data *data);
 void		print(t_philo *ph, char *s);
-
+long long	time_(t_philo ph);
 #endif

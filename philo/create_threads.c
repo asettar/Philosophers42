@@ -21,22 +21,20 @@ void	check_death(t_data *data, t_philo *philos)
 		i = -1;
 		while (++i < data->number_of_phil)
 		{
-			pthread_mutex_lock(&data->left_philos_mutex);
+			pthread_mutex_lock(&data->left_philo_mutex);
 			if (!data->left_philos)
-				return ;
-			pthread_mutex_unlock(&data->left_philos_mutex);
+				return (pthread_mutex_unlock(&data->left_philo_mutex), (void)0);
+			pthread_mutex_unlock(&data->left_philo_mutex);
 			pthread_mutex_lock(&philos[i].meal_mutex);
-			if (get_time() - philos[i].last_meal >= data->time_to_die
-				&& philos[i].left_meals != 0)
+			if (time_(philos[i]) >= data->time_to_die && philos[i].left_meals)
 			{
 				pthread_mutex_lock(&data->print);
 				printf("%lld philosopher number %d died\n",
 					get_time() - data->start_time, philos[i].id);
-				pthread_mutex_lock(&data->print);
-				dead_philo = 1;
-				pthread_mutex_lock(&data->print);
-				sleep(1);
-				return ;
+				pthread_mutex_lock(&data->dead_mutex);
+				data->dead_philo = 1;
+				pthread_mutex_unlock(&data->dead_mutex);
+				return (sleep(1), (void)0);
 			}
 			pthread_mutex_unlock(&philos[i].meal_mutex);
 		}
@@ -74,14 +72,18 @@ void	*routine(void *philo)
 		ft_usleep(ph->data->time_to_eat / 2);
 	while (1)
 	{
+		pthread_mutex_lock(&ph->data->dead_mutex);
+		if (ph->data->dead_philo)
+			return (pthread_mutex_unlock(&ph->data->dead_mutex), ph);
+		pthread_mutex_unlock(&ph->data->dead_mutex);
 		eat(ph);
 		if (ph->data->number_of_meals != -1)
 			ph->left_meals--;
 		if (ph->left_meals == 0)
 		{
-			pthread_mutex_lock(&ph->data->left_philos_mutex);
+			pthread_mutex_lock(&ph->data->left_philo_mutex);
 			ph->data->left_philos--;
-			pthread_mutex_unlock(&ph->data->left_philos_mutex);
+			pthread_mutex_unlock(&ph->data->left_philo_mutex);
 			break ;
 		}
 		sleep_think(ph);
@@ -103,8 +105,8 @@ bool	create_threads(t_philo *philos, t_data *data)
 	while (++i < data->number_of_phil)
 		pthread_detach(philos[i].th);
 	check_death(data, philos);
-	pthread_mutex_destroy(&data->print);
-	pthread_mutex_destroy(&data->left_philos_mutex);
+	pthread_mutex_destroy(&data->dead_mutex);
+	pthread_mutex_destroy(&data->left_philo_mutex);
 	i = -1;
 	while (++i < data->number_of_meals)
 	{

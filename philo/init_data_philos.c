@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-bool	init_data(t_data *data, char **argv)
+bool	initialize_data(t_data *data, char **argv)
 {
 	data->number_of_phil = ft_atoi(argv[1]);
 	if (data->number_of_phil == 0)
@@ -28,15 +28,14 @@ bool	init_data(t_data *data, char **argv)
 	data->dead_philo = 0;
 	if (pthread_mutex_init(&data->print, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
-	if (pthread_mutex_init(&data->left_philos_mutex, NULL))
+	if (pthread_mutex_init(&data->left_philo_mutex, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 	if (pthread_mutex_init(&data->dead_mutex, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
-
 	return (0);
 }
 
-bool	init_philo(t_philo *philos, t_data *data)
+bool	initialize_philos(t_philo *philos, t_data *data)
 {
 	int	i;
 
