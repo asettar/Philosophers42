@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_threads.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/24 00:44:12 by asettar           #+#    #+#             */
+/*   Updated: 2023/08/24 01:01:14 by asettar          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	check_death(t_data *data, t_philo *philos)
 {
-	int i;
+	int	i;
 
 	while (1)
 	{
@@ -18,53 +30,60 @@ void	check_death(t_data *data, t_philo *philos)
 				&& philos[i].left_meals != 0)
 			{
 				pthread_mutex_lock(&data->print);
-				// printf("%lld\n", get_time() - philos[i].last_meal);
-				printf("%lld philosopher number %d died\n", get_time() - data->start_time, philos[i].id);
+				printf("%lld philosopher number %d died\n",
+					get_time() - data->start_time, philos[i].id);
 				sleep(1);
 				return ;
 			}
 			pthread_mutex_unlock(&philos[i].meal_mutex);
 		}
-		// usleep(10);
 	}
+}
+
+void	eat(t_philo *ph)
+{
+	pthread_mutex_lock(&ph->right_fork);
+	print(ph, "has taken the right fork");
+	pthread_mutex_lock(ph->left_fork);
+	print(ph, "has taken the left fork");
+	pthread_mutex_lock(&ph->meal_mutex);
+	ph->last_meal = get_time();
+	pthread_mutex_unlock(&ph->meal_mutex);
+	print(ph, "is eating");
+	ft_usleep(ph->data->time_to_eat);
+	pthread_mutex_unlock(&ph->right_fork);
+	pthread_mutex_unlock(ph->left_fork);
+}
+
+void	sleep_think(t_philo *ph)
+{
+	pthread_mutex_unlock(&ph->left_meals_mutex);
+	print(ph, "is sleeping");
+	ft_usleep(ph->data->time_to_sleep);
+	print(ph, "is thinking");
 }
 
 void	*routine(void *philo)
 {
-	t_philo *ph;
-	
+	t_philo	*ph;
+
 	ph = (t_philo *)philo;
 	if (ph->id % 2 == 0)
 		ft_usleep(ph->data->time_to_eat / 2);
 	while (1)
 	{
-		pthread_mutex_lock(&ph->right_fork);
-		print(ph, "has taken the right fork");
-		pthread_mutex_lock(ph->left_fork);
-		print(ph, "has taken the left fork");
-		pthread_mutex_lock(&ph->meal_mutex);
-		ph->last_meal = get_time();
-		// printf("%lld::||\n", ph->last_meal - ph->data->start_time);
-		pthread_mutex_unlock(&ph->meal_mutex);
-		print(ph, "is eating");
-		ft_usleep(ph->data->time_to_eat);
-		pthread_mutex_unlock(&ph->right_fork);
-		pthread_mutex_unlock(ph->left_fork);
+		eat(ph);
 		pthread_mutex_lock(&ph->left_meals_mutex);
 		if (ph->data->number_of_meals != -1)
 			ph->left_meals--;
-		// printf("%d :: %d||\n", ph->id, ph->left_meals);
 		if (ph->left_meals == 0)
 		{
 			pthread_mutex_lock(&ph->data->left_philos_mutex);
 			ph->data->left_philos--;
 			pthread_mutex_unlock(&ph->data->left_philos_mutex);
-			break;
+			break ;
 		}
-		pthread_mutex_unlock(&ph->left_meals_mutex);
-		print(ph, "is sleeping");
-		ft_usleep(ph->data->time_to_sleep);
-		print(ph, "is thinking");
+		sleep_think(ph);
 	}
 	return (ph);
 }
@@ -92,5 +111,6 @@ bool	create_threads(t_philo *philos, t_data *data)
 		pthread_mutex_destroy(&philos[i].meal_mutex);
 		pthread_mutex_destroy(&philos[i].left_meals_mutex);
 	}
+	free(philos);
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_data_philos.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/24 00:33:39 by asettar           #+#    #+#             */
+/*   Updated: 2023/08/24 01:11:49 by asettar          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 bool	init_data(t_data *data, char **argv)
@@ -11,7 +23,7 @@ bool	init_data(t_data *data, char **argv)
 	data->number_of_meals = -1;
 	if (argv[5])
 		data->number_of_meals = ft_atoi(argv[5]);
-	data->left_philos =	 data->number_of_phil;    // only when you have number of meals
+	data->left_philos = data->number_of_phil;
 	data->start_time = get_time();
 	if (pthread_mutex_init(&data->print, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
@@ -22,12 +34,11 @@ bool	init_data(t_data *data, char **argv)
 
 bool	init_philo(t_philo *philos, t_data *data)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < data->number_of_phil)
 	{
-
 		if (pthread_mutex_init(&philos[i].meal_mutex, NULL))
 			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 		if (pthread_mutex_init(&philos[i].right_fork, NULL))
@@ -40,7 +51,8 @@ bool	init_philo(t_philo *philos, t_data *data)
 		philos[i].last_meal = get_time();
 		if (philos[i].last_meal == -1)
 			return (1);
-		philos[i].left_fork = &philos[(i + 1) % data->number_of_phil].right_fork;
+		philos[i].left_fork = &philos[(i + 1)
+			% data->number_of_phil].right_fork;
 	}
 	if (create_threads(philos, data))
 		return (1);
