@@ -100,10 +100,8 @@ bool	create_threads(t_philo *philos, t_data *data)
 	{
 		if (pthread_create(&philos[i].th, NULL, &routine, &philos[i]))
 			return (ft_putstr_fd("pthread_create func error", 2), 1);
-	}
-	i = -1;
-	while (++i < data->number_of_phil)
 		pthread_detach(philos[i].th);
+	}
 	check_death(data, philos);
 	pthread_mutex_destroy(&data->dead_mutex);
 	pthread_mutex_destroy(&data->left_philo_mutex);
