@@ -50,8 +50,6 @@ bool	initialize_philos(t_philo *philos, t_data *data)
 		philos[i].data = data;
 		philos[i].left_meals = data->number_of_meals;
 		philos[i].last_meal = get_time();
-		if (philos[i].last_meal == -1)
-			return (1);
 		philos[i].left_fork = &philos[(i + 1)
 			% data->number_of_phil].right_fork;
 	}

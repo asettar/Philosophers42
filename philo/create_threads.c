@@ -22,7 +22,7 @@ void	check_death(t_data *data, t_philo *philos)
 		while (++i < data->number_of_phil)
 		{
 			pthread_mutex_lock(&data->left_philo_mutex);
-			if (!data->left_philos)
+			if (!data->left_philos || !data->number_of_meals)
 				return (pthread_mutex_unlock(&data->left_philo_mutex), (void)0);
 			pthread_mutex_unlock(&data->left_philo_mutex);
 			pthread_mutex_lock(&philos[i].meal_mutex);
@@ -73,7 +73,7 @@ void	*routine(void *philo)
 	while (1)
 	{
 		pthread_mutex_lock(&ph->data->dead_mutex);
-		if (ph->data->dead_philo)
+		if (ph->data->dead_philo || !ph->left_meals)
 			return (pthread_mutex_unlock(&ph->data->dead_mutex), ph);
 		pthread_mutex_unlock(&ph->data->dead_mutex);
 		eat(ph);
