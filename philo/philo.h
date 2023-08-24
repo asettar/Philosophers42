@@ -6,7 +6,7 @@
 /*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 00:45:01 by asettar           #+#    #+#             */
-/*   Updated: 2023/08/24 01:30:04 by asettar          ###   ########.fr       */
+/*   Updated: 2023/08/24 02:12:11 by asettar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				number_of_meals;
 	int				left_philos;
+	int				dead_philo;
 	long long		start_time;
 	pthread_mutex_t	left_philos_mutex;
 	pthread_mutex_t	print;

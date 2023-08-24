@@ -6,7 +6,7 @@
 /*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 00:33:39 by asettar           #+#    #+#             */
-/*   Updated: 2023/08/24 01:44:29 by asettar          ###   ########.fr       */
+/*   Updated: 2023/08/24 02:11:52 by asettar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ bool	init_data(t_data *data, char **argv)
 		data->number_of_meals = ft_atoi(argv[5]);
 	data->left_philos = data->number_of_phil;
 	data->start_time = get_time();
+	data->dead_philo = 0;
 	if (pthread_mutex_init(&data->print, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 	if (pthread_mutex_init(&data->left_philos_mutex, NULL))

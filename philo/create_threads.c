@@ -6,7 +6,7 @@
 /*   By: asettar <asettar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 00:44:12 by asettar           #+#    #+#             */
-/*   Updated: 2023/08/24 01:43:48 by asettar          ###   ########.fr       */
+/*   Updated: 2023/08/24 02:10:22 by asettar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void	check_death(t_data *data, t_philo *philos)
 				pthread_mutex_lock(&data->print);
 				printf("%lld philosopher number %d died\n",
 					get_time() - data->start_time, philos[i].id);
+				pthread_mutex_lock(&data->print);
+				dead_philo = 1;
+				pthread_mutex_lock(&data->print);
 				sleep(1);
 				return ;
 			}
