@@ -44,8 +44,3 @@ void	print(t_philo *ph, char *s)
 	printf("philosopher %d %s\n", ph->id, s);
 	pthread_mutex_unlock(&ph->data->print);
 }
-
-long long	time_(t_philo ph)
-{
-	return (get_time() - ph.last_meal);
-}

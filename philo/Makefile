@@ -13,7 +13,7 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 NAME = philo
-SRCS = main.c philo_utils.c check_args_errors.c create_threads.c  init_data_philos.c
+SRCS = main.c philo_utils.c check_args_errors.c create_threads.c  init_data_philos.c check_death.c
 OBJS = $(SRCS:.c=.o)
 HEADER = philo.h
 LIBFT = libft/libft.a
