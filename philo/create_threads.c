@@ -33,8 +33,9 @@ void	check_death(t_data *data, t_philo *philos)
 					get_time() - data->start_time, philos[i].id);
 				pthread_mutex_lock(&data->dead_mutex);
 				data->dead_philo = 1;
+				pthread_mutex_unlock(&philos[i].meal_mutex);
 				pthread_mutex_unlock(&data->dead_mutex);
-				return (usleep(10000), (void)0);
+				return (usleep(100000), (void)0);
 			}
 			pthread_mutex_unlock(&philos[i].meal_mutex);
 		}
@@ -110,7 +111,6 @@ bool	create_threads(t_philo *philos, t_data *data)
 		}
 	}
 	check_death(data, philos);
-	pthread_mutex_unlock(&data->print);
 	destroy_mutexes(data, 3, philos, data->number_of_phil);
 	return (0);
 }
