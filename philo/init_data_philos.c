@@ -12,6 +12,26 @@
 
 #include "philo.h"
 
+void	destroy_mutexes(t_data *data, int ndata, t_philo *philos, int nphilo)
+{
+	int	i;
+
+	if (ndata <= 1)
+		pthread_mutex_destroy(&data->print);
+	if (ndata <= 2)
+		pthread_mutex_destroy(&data->left_philo_mutex);
+	if (ndata <= 3)
+		pthread_mutex_destroy(&data->dead_mutex);
+	i = -1;
+	while (++i < nphilo)
+	{
+		pthread_mutex_destroy(&philos[i].meal_mutex);
+		pthread_mutex_destroy(&philos[i].right_fork);
+		pthread_mutex_destroy(&philos[i].left_meals_mutex);
+	}
+	free(philos);
+}
+
 bool	initialize_data(t_data *data, char **argv)
 {
 	data->number_of_phil = ft_atoi(argv[1]);
@@ -29,9 +49,38 @@ bool	initialize_data(t_data *data, char **argv)
 	if (pthread_mutex_init(&data->print, NULL))
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
 	if (pthread_mutex_init(&data->left_philo_mutex, NULL))
+	{
+		destroy_mutexes(data, 1, NULL, 0);
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+	}
 	if (pthread_mutex_init(&data->dead_mutex, NULL))
+	{
+		destroy_mutexes(data, 2, NULL, 0);
 		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+	}
+	return (0);
+}
+
+int	initialize_philo_mutexes(t_philo *philos, int i, t_data *data)
+{
+	if (pthread_mutex_init(&philos[i].meal_mutex, NULL))
+	{
+		destroy_mutexes(data, 3, philos, i);
+		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+	}
+	if (pthread_mutex_init(&philos[i].right_fork, NULL))
+	{
+		pthread_mutex_destroy(&philos[i].meal_mutex);
+		destroy_mutexes(data, 3, philos, i);
+		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+	}
+	if (pthread_mutex_init(&philos[i].left_meals_mutex, NULL))
+	{
+		pthread_mutex_destroy(&philos[i].meal_mutex);
+		pthread_mutex_destroy(&philos[i].right_fork);
+		destroy_mutexes(data, 3, philos, i);
+		return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+	}
 	return (0);
 }
 
@@ -42,10 +91,8 @@ bool	initialize_philos(t_philo *philos, t_data *data)
 	i = -1;
 	while (++i < data->number_of_phil)
 	{
-		if (pthread_mutex_init(&philos[i].meal_mutex, NULL))
-			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
-		if (pthread_mutex_init(&philos[i].right_fork, NULL))
-			return (ft_putstr_fd("pthread_mutex_init function error", 2), 1);
+		if (initialize_philo_mutexes(philos, i, data))
+			return (1);
 		philos[i].id = i + 1;
 		philos[i].data = data;
 		philos[i].left_meals = data->number_of_meals;

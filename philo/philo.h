@@ -59,4 +59,5 @@ void		check_death(t_data *data, t_philo *philos);
 bool		create_threads(t_philo *philos, t_data *data);
 void		print(t_philo *ph, char *s);
 long long	time_(t_philo ph);
+void		destroy_mutexes(t_data *dt, int ndata, t_philo *philos, int nphilo);
 #endif

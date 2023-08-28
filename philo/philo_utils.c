@@ -27,7 +27,7 @@ void	ft_usleep(size_t t_ms)
 	start = get_time();
 	while (get_time() - start < t_ms)
 	{
-		usleep(50);
+		usleep(100);
 	}
 }
 

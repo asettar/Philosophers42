@@ -34,7 +34,7 @@ void	check_death(t_data *data, t_philo *philos)
 				pthread_mutex_lock(&data->dead_mutex);
 				data->dead_philo = 1;
 				pthread_mutex_unlock(&data->dead_mutex);
-				return (sleep(1), (void)0);
+				return (usleep(10000), (void)0);
 			}
 			pthread_mutex_unlock(&philos[i].meal_mutex);
 		}
@@ -69,7 +69,7 @@ void	*routine(void *philo)
 
 	ph = (t_philo *)philo;
 	if (ph->id % 2 == 0)
-		ft_usleep(ph->data->time_to_eat / 2);
+		ft_usleep(200);
 	while (1)
 	{
 		pthread_mutex_lock(&ph->data->dead_mutex);
@@ -99,19 +99,18 @@ bool	create_threads(t_philo *philos, t_data *data)
 	while (++i < data->number_of_phil)
 	{
 		if (pthread_create(&philos[i].th, NULL, &routine, &philos[i]))
+		{
+			destroy_mutexes(data, 3, philos, data->number_of_phil);
 			return (ft_putstr_fd("pthread_create func error", 2), 1);
-		pthread_detach(philos[i].th);
+		}
+		if (pthread_detach(philos[i].th))
+		{
+			destroy_mutexes(data, 3, philos, data->number_of_phil);
+			return (ft_putstr_fd("pthread_detach func error", 2), 1);
+		}
 	}
 	check_death(data, philos);
-	pthread_mutex_destroy(&data->dead_mutex);
-	pthread_mutex_destroy(&data->left_philo_mutex);
-	i = -1;
-	while (++i < data->number_of_meals)
-	{
-		pthread_mutex_destroy(&philos[i].right_fork);
-		pthread_mutex_destroy(&philos[i].meal_mutex);
-		pthread_mutex_destroy(&philos[i].left_meals_mutex);
-	}
-	free(philos);
+	pthread_mutex_unlock(&data->print);
+	destroy_mutexes(data, 3, philos, data->number_of_phil);
 	return (0);
 }
